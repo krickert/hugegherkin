@@ -1,6 +1,6 @@
 package com.hugeinc.gherkin.pages.pageload;
 
-import com.hugeinc.gherkin.api.SeleniumAPI;
+import com.hugeinc.gherkin.api.SeleniumHelper;
 import com.hugeinc.gherkin.framework.AbstractSeleniumTest;
 import cucumber.api.java.After;
 import cucumber.api.java.Before;
@@ -34,7 +34,7 @@ public class PageloadsIT extends AbstractSeleniumTest {
      * The Selenium aPI.
      */
     @Autowired
-    private SeleniumAPI seleniumAPI;
+    private SeleniumHelper seleniumHelper;
 
     /**
      * Enginetrim web element.
@@ -42,16 +42,16 @@ public class PageloadsIT extends AbstractSeleniumTest {
      * @return the web element
      */
     private WebElement enginetrim() {
-        return seleniumAPI.findElementByCss("div.details div.specifications-dropdown div.dropdown-heading div.dropdown-hit-area div.selected-trim span.trim-name");
+        return seleniumHelper.findElementByCss("div.details div.specifications-dropdown div.dropdown-heading div.dropdown-hit-area div.selected-trim span.trim-name");
     }
 
     /**
      * Images void.
      */
     private void images() {
-        List<WebElement> images = seleniumAPI.findElementsByCss(".gallery-container");
+        List<WebElement> images = seleniumHelper.findElementsByCss(".gallery-container");
         assertTrue("There are images displayed", images.size() > 1);
-        WebElement gallery = seleniumAPI.findElementByClassName("homepage gallery");
+        WebElement gallery = seleniumHelper.findElementByClassName("homepage gallery");
         assertTrue(gallery.isDisplayed());
 
     }
@@ -65,7 +65,7 @@ public class PageloadsIT extends AbstractSeleniumTest {
     @Before("@AllPagesLoadSuccessfully")
     public void setUp() throws Exception {
         logger.debug("Opens the home page");
-        seleniumAPI.start();
+        seleniumHelper.start();
     }
 
     /**
@@ -73,7 +73,7 @@ public class PageloadsIT extends AbstractSeleniumTest {
      */
     @After("@AllPagesLoadSuccessfully")
     public void tearDown() {
-        seleniumAPI.quit();
+        seleniumHelper.quit();
     }
 
     /**
@@ -83,9 +83,8 @@ public class PageloadsIT extends AbstractSeleniumTest {
      */
     @Given("^User is on home page$")
     public void User_is_on_home_page() throws Throwable {
-        seleniumAPI.openPage(getPageUrl("/"));
-        Assert.assertEquals(true, seleniumAPI.findElementByClassName("homepage").isDisplayed());
-
+        seleniumHelper.openPage(getPageUrl("/"));
+        Assert.assertEquals(true, seleniumHelper.findElementByClassName("homepage").isDisplayed());
     }
 
     /**
@@ -96,13 +95,13 @@ public class PageloadsIT extends AbstractSeleniumTest {
     @Then("^Ensure the Hero image is displayed properly on (Desktop|Tablet|Mobile)  view$")
     public void setViewportSize(String viewportSize) {
         if (viewportSize.equals("Mobile")) {
-            seleniumAPI.resizeToMobile();
+            seleniumHelper.resizeToMobile();
         } else if (viewportSize.equals("Tablet")) {
-            seleniumAPI.resizeToTablet();
+            seleniumHelper.resizeToTablet();
         } else if (viewportSize.equals("Desktop")) {
-            seleniumAPI.resizeToWeb();
+            seleniumHelper.resizeToWeb();
         }
-        WebElement Heroimage = seleniumAPI.findElementByCss("html.js body#home div#wrapper div#content div.grid div#tile-0.tile");
+        WebElement Heroimage = seleniumHelper.findElementByCss("html.js body#home div#wrapper div#content div.grid div#tile-0.tile");
         assertTrue(Heroimage.isDisplayed());
 
     }
@@ -115,13 +114,13 @@ public class PageloadsIT extends AbstractSeleniumTest {
     @Then("^Page is displayed properly on (desktop|tablet|mobile) viewport$")
     public void setViewportSize1(String viewportSize) {
         if (viewportSize.equals("desktop")) {
-            seleniumAPI.resizeToWeb();
+            seleniumHelper.resizeToWeb();
         } else if (viewportSize.equals("tablet")) {
-            seleniumAPI.resizeToTablet();
+            seleniumHelper.resizeToTablet();
         } else if (viewportSize.equals("mobile")) {
-            seleniumAPI.resizeToMobile();
+            seleniumHelper.resizeToMobile();
         }
-        assertTrue(seleniumAPI.findElementByCss("div.grid-container div.nav-wrapper div.title").isDisplayed());
+        assertTrue(seleniumHelper.findElementByCss("div.grid-container div.nav-wrapper div.title").isDisplayed());
 
     }
 
@@ -147,11 +146,11 @@ public class PageloadsIT extends AbstractSeleniumTest {
     @And("^Specifications page should display properly in (Desktop|Tablet|Mobile) mode$")
     public void setViewportSize3(String viewportSize) {
         if (viewportSize.equals("Mobile")) {
-            seleniumAPI.resizeToMobile();
+            seleniumHelper.resizeToMobile();
         } else if (viewportSize.equals("Tablet")) {
-            seleniumAPI.resizeToTablet();
+            seleniumHelper.resizeToTablet();
         } else if (viewportSize.equals("Desktop")) {
-            seleniumAPI.resizeToWeb();
+            seleniumHelper.resizeToWeb();
         }
         WebElement enginetrim = enginetrim();
         assertTrue(enginetrim.isDisplayed());
@@ -167,20 +166,20 @@ public class PageloadsIT extends AbstractSeleniumTest {
     @And("^Page should display properly in (Desktop|Tablet|Mobile) mode$")
     public void setViewportSize4(String viewportSize) {
         if (viewportSize.equals("Mobile")) {
-            seleniumAPI.resizeToMobile();
+            seleniumHelper.resizeToMobile();
         } else if (viewportSize.equals("Tablet")) {
-            seleniumAPI.resizeToTablet();
+            seleniumHelper.resizeToTablet();
         } else if (viewportSize.equals("Desktop")) {
-            seleniumAPI.resizeToWeb();
+            seleniumHelper.resizeToWeb();
         }
-        seleniumAPI.openPage("/");
+        seleniumHelper.openPage("http://www.hugeinc.com/");
     }
 
 
     @When("^User clicks on features link in secondary navigation$")
     public void User_clicks_on_features_link_in_secondary_navigation() throws Throwable {
         //User clicks features tab in secondary nav
-        WebElement secondarynavfeatures = seleniumAPI.findElementByXpath("//div[@class='sticky-wrapper']/nav/ul/li[3]/a");
+        WebElement secondarynavfeatures = seleniumHelper.findElementByXpath("//div[@class='sticky-wrapper']/nav/ul/li[3]/a");
         secondarynavfeatures.click();
         //By default the page lands on Keyfeatures
     }
@@ -188,16 +187,16 @@ public class PageloadsIT extends AbstractSeleniumTest {
     @Then("^Verify features page is displayed properly in (Desktop|Tablet|Mobile) mode$")
     public void setViewportSize10(String viewportSize) {
         if (viewportSize.equals("Mobile")) {
-            seleniumAPI.resizeToMobile();
+            seleniumHelper.resizeToMobile();
         } else if (viewportSize.equals("Tablet")) {
-            seleniumAPI.resizeToTablet();
+            seleniumHelper.resizeToTablet();
         } else if (viewportSize.equals("Desktop")) {
-            seleniumAPI.resizeToWeb();
+            seleniumHelper.resizeToWeb();
         }
 
-        WebElement featureitem = seleniumAPI.findElementByCss("div.features-content div.feature-block div.feature-item");
+        WebElement featureitem = seleniumHelper.findElementByCss("div.features-content div.feature-block div.feature-item");
         assertTrue(featureitem.isDisplayed());
-        WebElement title = seleniumAPI.findElementByCss("div.features-content h1");
+        WebElement title = seleniumHelper.findElementByCss("div.features-content h1");
         assertTrue(title.getText().equalsIgnoreCase("key features"));
 
     }
